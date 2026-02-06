@@ -61,19 +61,19 @@ export default function Index() {
             <div className="animate-slide-up">
               <div className="inline-flex items-center gap-2 bg-primary/10 text-primary rounded-full px-4 py-1.5 text-sm font-medium mb-6">
                 <Sparkles className="h-4 w-4" />
-                AI-Powered HR Support
+                AI-Powered Policy Support
               </div>
               <h1 className="text-4xl lg:text-5xl font-bold text-foreground mb-6 leading-tight">
-                Your HR Questions,{" "}
+                Your Policy Questions,{" "}
                 <span className="text-primary">Answered Instantly</span>
               </h1>
               <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                Find answers to all your HR policy questions in one place. 
+                Find answers to all your policy questions in one place. 
                 Our AI assistant helps you understand leave policies, attendance rules, 
                 and workplace guidelines quickly and clearly.
               </p>
               
-              <SearchBar large placeholder="Ask any HR question... e.g., 'How many sick days do I get?'" />
+              <SearchBar large placeholder="Ask any policy question... e.g., 'How many sick days do I get?'" />
 
               <div className="mt-6 flex items-center gap-4">
                 <Link
@@ -102,9 +102,9 @@ export default function Index() {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4">Browse HR Policies</h2>
+            <h2 className="text-3xl font-bold text-foreground mb-4">Browse Policies</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Explore our comprehensive collection of HR policies and guidelines organized by category
+              Explore our comprehensive collection of policies and guidelines organized by category
             </p>
           </div>
 
@@ -127,9 +127,9 @@ export default function Index() {
             >
               <div className="relative z-10">
                 <Sparkles className="h-10 w-10 mb-4 opacity-90" />
-                <h3 className="text-2xl font-bold mb-2">Ask the HR Assistant</h3>
+                <h3 className="text-2xl font-bold mb-2">Ask the Policy Assistant</h3>
                 <p className="opacity-90 mb-4">
-                  Get instant answers to your HR questions using our AI-powered assistant
+                  Get instant answers to your policy questions using our AI-powered assistant
                 </p>
                 <span className="inline-flex items-center gap-2 font-medium">
                   Start asking <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
