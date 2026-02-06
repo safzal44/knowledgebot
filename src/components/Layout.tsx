@@ -39,8 +39,8 @@ export function Layout({ children }: LayoutProps) {
                 <Book className="h-5 w-5 text-primary-foreground" />
               </div>
               <div className="hidden sm:block">
-                <h1 className="text-lg font-semibold text-foreground">HR Knowledge Base</h1>
-                <p className="text-xs text-muted-foreground">Internal Staff Portal</p>
+                <h1 className="text-lg font-semibold text-foreground">Policy Hub</h1>
+                <p className="text-xs text-muted-foreground">Staff Portal</p>
               </div>
             </Link>
 
