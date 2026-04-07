@@ -295,7 +295,7 @@ export default function AdminDocumentsPage() {
                         title={doc.is_active ? "Click to deactivate" : "Click to activate"}
                       >
                         {doc.is_active ? (
-                          <><CheckCircle className="h-4 w-4 text-green-600" /> Active</>
+                          <><CheckCircle className="h-4 w-4 text-primary" /> Active</>
                         ) : (
                           <><AlertCircle className="h-4 w-4 text-muted-foreground" /> Inactive</>
                         )}
