@@ -11,6 +11,7 @@ import OnboardingPage from "./pages/OnboardingPage";
 import AskPage from "./pages/AskPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
+import AdminDocumentsPage from "./pages/AdminDocumentsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
