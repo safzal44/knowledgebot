@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Book, Users, MessageSquare, Shield, Home, Menu, X, LogIn, LogOut, UserCircle } from "lucide-react";
+import { Book, Users, MessageSquare, Shield, Home, Menu, X, LogIn, LogOut, UserCircle, FileUp } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
@@ -10,6 +10,10 @@ const navItems = [
   { path: "/policies", label: "HR Policies", icon: Book },
   { path: "/onboarding", label: "New Staff", icon: Users },
   { path: "/ask", label: "Ask HR", icon: MessageSquare },
+];
+
+const adminNavItems = [
+  { path: "/admin/documents", label: "Upload PDFs", icon: FileUp },
 ];
 
 interface LayoutProps {
@@ -47,6 +51,23 @@ export function Layout({ children }: LayoutProps) {
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-1">
               {navItems.map((item) => {
+                const isActive = location.pathname === item.path;
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      isActive
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    }`}
+                  >
+                    <item.icon className="h-4 w-4" />
+                    {item.label}
+                  </Link>
+                );
+              })}
+              {isAdmin && adminNavItems.map((item) => {
                 const isActive = location.pathname === item.path;
                 return (
                   <Link
@@ -112,6 +133,24 @@ export function Layout({ children }: LayoutProps) {
           {mobileMenuOpen && (
             <nav className="md:hidden py-4 border-t border-border animate-fade-in space-y-1">
               {navItems.map((item) => {
+                const isActive = location.pathname === item.path;
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                      isActive
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    }`}
+                  >
+                    <item.icon className="h-5 w-5" />
+                    {item.label}
+                  </Link>
+                );
+              })}
+              {isAdmin && adminNavItems.map((item) => {
                 const isActive = location.pathname === item.path;
                 return (
                   <Link
