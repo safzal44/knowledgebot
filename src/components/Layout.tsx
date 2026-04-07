@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Book, Users, MessageSquare, Shield, Home, Menu, X, LogIn, LogOut, UserCircle } from "lucide-react";
+import { Book, Users, MessageSquare, Shield, Home, Menu, X, LogIn, LogOut, UserCircle, FileUp } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
@@ -10,6 +10,10 @@ const navItems = [
   { path: "/policies", label: "HR Policies", icon: Book },
   { path: "/onboarding", label: "New Staff", icon: Users },
   { path: "/ask", label: "Ask HR", icon: MessageSquare },
+];
+
+const adminNavItems = [
+  { path: "/admin/documents", label: "Upload PDFs", icon: FileUp },
 ];
 
 interface LayoutProps {
