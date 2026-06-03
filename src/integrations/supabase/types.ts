@@ -14,38 +14,146 @@ export type Database = {
   }
   public: {
     Tables: {
+      departments: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      document_charts: {
+        Row: {
+          chart_type: string
+          created_at: string
+          data: Json
+          description: string | null
+          document_id: string
+          id: string
+          title: string
+        }
+        Insert: {
+          chart_type: string
+          created_at?: string
+          data: Json
+          description?: string | null
+          document_id: string
+          id?: string
+          title: string
+        }
+        Update: {
+          chart_type?: string
+          created_at?: string
+          data?: Json
+          description?: string | null
+          document_id?: string
+          id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_charts_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "policy_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_types: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       policy_documents: {
         Row: {
           created_at: string
+          department_id: string | null
+          document_type_id: string | null
           extracted_text: string | null
           file_path: string
           id: string
           is_active: boolean
+          program_id: string | null
           title: string
           updated_at: string
           uploaded_by: string
         }
         Insert: {
           created_at?: string
+          department_id?: string | null
+          document_type_id?: string | null
           extracted_text?: string | null
           file_path: string
           id?: string
           is_active?: boolean
+          program_id?: string | null
           title: string
           updated_at?: string
           uploaded_by: string
         }
         Update: {
           created_at?: string
+          department_id?: string | null
+          document_type_id?: string | null
           extracted_text?: string | null
           file_path?: string
           id?: string
           is_active?: boolean
+          program_id?: string | null
           title?: string
           updated_at?: string
           uploaded_by?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "policy_documents_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policy_documents_document_type_id_fkey"
+            columns: ["document_type_id"]
+            isOneToOne: false
+            referencedRelation: "document_types"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policy_documents_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "programs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -68,6 +176,27 @@ export type Database = {
           id?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      programs: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
         }
         Relationships: []
       }
