@@ -2,10 +2,11 @@ import { Layout } from "@/components/Layout";
 import { DisclaimerBanner } from "@/components/DisclaimerBanner";
 import { useState, useRef, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Send, Sparkles, User, AlertCircle, Loader2 } from "lucide-react";
+import { Send, Sparkles, User, AlertCircle, Loader2, Mic, MicOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
+import { useVoiceInput } from "@/hooks/useVoiceInput";
 
 interface Message {
   role: "user" | "assistant";
