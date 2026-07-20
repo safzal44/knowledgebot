@@ -245,11 +245,24 @@ export default function AskPage() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Type your question..."
-                rows={1}
-                className="flex-1 resize-none rounded-xl border border-border bg-background px-4 py-3 text-foreground focus:border-primary focus:ring-2 focus:ring-primary/10 focus:outline-none"
+                placeholder={voice.isListening ? "Listening..." : "Type or speak your question..."}
+                rows={2}
+                className="flex-1 resize-none rounded-xl border border-border bg-background px-4 py-3 text-base text-foreground focus:border-primary focus:ring-2 focus:ring-primary/10 focus:outline-none"
                 disabled={isLoading}
               />
+              {voice.supported && (
+                <Button
+                  type="button"
+                  onClick={voice.toggle}
+                  disabled={isLoading}
+                  size="icon"
+                  variant={voice.isListening ? "destructive" : "outline"}
+                  className={`h-12 w-12 rounded-xl ${voice.isListening ? "animate-pulse" : ""}`}
+                  aria-label={voice.isListening ? "Stop voice input" : "Start voice input"}
+                >
+                  {voice.isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+                </Button>
+              )}
               <Button
                 onClick={() => handleSend()}
                 disabled={!input.trim() || isLoading}
@@ -260,6 +273,7 @@ export default function AskPage() {
               </Button>
             </div>
           </div>
+
         </div>
 
         {/* Disclaimer */}
