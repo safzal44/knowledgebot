@@ -196,18 +196,18 @@ export default function AskPage() {
                       </div>
                     )}
                     <div
-                      className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                      className={`max-w-[85%] rounded-2xl px-5 py-4 text-base leading-relaxed ${
                         message.role === "user"
                           ? "bg-primary text-primary-foreground"
                           : "bg-muted text-foreground"
                       }`}
                     >
                       {message.role === "assistant" ? (
-                        <div className="prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 prose-li:my-0">
+                        <div className="prose prose-base max-w-none prose-p:my-2 prose-ul:my-2 prose-li:my-1 prose-headings:mt-3 prose-headings:mb-2">
                           <ReactMarkdown>{message.content}</ReactMarkdown>
                         </div>
                       ) : (
-                        <p>{message.content}</p>
+                        <p className="whitespace-pre-wrap">{message.content}</p>
                       )}
                     </div>
                     {message.role === "user" && (
