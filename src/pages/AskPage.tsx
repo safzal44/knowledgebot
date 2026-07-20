@@ -145,7 +145,7 @@ export default function AskPage() {
 
   return (
     <Layout>
-      <div className="container mx-auto px-4 py-8 h-[calc(100vh-12rem)] flex flex-col">
+      <div className="container mx-auto px-4 py-8 h-[calc(100vh-8rem)] flex flex-col">
         {/* Header */}
         <div className="text-center mb-6 animate-slide-up">
           <div className="inline-flex items-center gap-2 bg-primary/10 text-primary rounded-full px-4 py-1.5 text-sm font-medium mb-4">
