@@ -2,10 +2,11 @@ import { Layout } from "@/components/Layout";
 import { DisclaimerBanner } from "@/components/DisclaimerBanner";
 import { useState, useRef, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Send, Sparkles, User, AlertCircle, Loader2 } from "lucide-react";
+import { Send, Sparkles, User, AlertCircle, Loader2, Mic, MicOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
+import { useVoiceInput } from "@/hooks/useVoiceInput";
 
 interface Message {
   role: "user" | "assistant";
@@ -30,6 +31,10 @@ export default function AskPage() {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const voice = useVoiceInput((text) => {
+    setInput((prev) => (prev ? prev + " " : "") + text);
+    inputRef.current?.focus();
+  });
 
   // Handle initial query from URL
   useEffect(() => {
@@ -144,7 +149,7 @@ export default function AskPage() {
 
   return (
     <Layout>
-      <div className="container mx-auto px-4 py-8 h-[calc(100vh-12rem)] flex flex-col">
+      <div className="container mx-auto px-4 py-8 h-[calc(100vh-8rem)] flex flex-col">
         {/* Header */}
         <div className="text-center mb-6 animate-slide-up">
           <div className="inline-flex items-center gap-2 bg-primary/10 text-primary rounded-full px-4 py-1.5 text-sm font-medium mb-4">
@@ -195,18 +200,18 @@ export default function AskPage() {
                       </div>
                     )}
                     <div
-                      className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                      className={`max-w-[85%] rounded-2xl px-5 py-4 text-base leading-relaxed ${
                         message.role === "user"
                           ? "bg-primary text-primary-foreground"
                           : "bg-muted text-foreground"
                       }`}
                     >
                       {message.role === "assistant" ? (
-                        <div className="prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 prose-li:my-0">
+                        <div className="prose prose-base max-w-none prose-p:my-2 prose-ul:my-2 prose-li:my-1 prose-headings:mt-3 prose-headings:mb-2">
                           <ReactMarkdown>{message.content}</ReactMarkdown>
                         </div>
                       ) : (
-                        <p>{message.content}</p>
+                        <p className="whitespace-pre-wrap">{message.content}</p>
                       )}
                     </div>
                     {message.role === "user" && (
@@ -240,11 +245,24 @@ export default function AskPage() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Type your question..."
-                rows={1}
-                className="flex-1 resize-none rounded-xl border border-border bg-background px-4 py-3 text-foreground focus:border-primary focus:ring-2 focus:ring-primary/10 focus:outline-none"
+                placeholder={voice.isListening ? "Listening..." : "Type or speak your question..."}
+                rows={2}
+                className="flex-1 resize-none rounded-xl border border-border bg-background px-4 py-3 text-base text-foreground focus:border-primary focus:ring-2 focus:ring-primary/10 focus:outline-none"
                 disabled={isLoading}
               />
+              {voice.supported && (
+                <Button
+                  type="button"
+                  onClick={voice.toggle}
+                  disabled={isLoading}
+                  size="icon"
+                  variant={voice.isListening ? "destructive" : "outline"}
+                  className={`h-12 w-12 rounded-xl ${voice.isListening ? "animate-pulse" : ""}`}
+                  aria-label={voice.isListening ? "Stop voice input" : "Start voice input"}
+                >
+                  {voice.isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+                </Button>
+              )}
               <Button
                 onClick={() => handleSend()}
                 disabled={!input.trim() || isLoading}
@@ -255,6 +273,7 @@ export default function AskPage() {
               </Button>
             </div>
           </div>
+
         </div>
 
         {/* Disclaimer */}
