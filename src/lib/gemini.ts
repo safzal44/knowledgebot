@@ -50,6 +50,7 @@ export async function streamGeminiChat(
     throw new Error("Gemini API Key is missing. Please set VITE_GEMINI_API_KEY in your .env file.");
   }
 
+  const aiClient = new GoogleGenAI({ apiKey: currentApiKey });
   const systemInstruction = await getKnowledgeBaseContext();
   
   // Format history for Gemini API
@@ -58,8 +59,8 @@ export async function streamGeminiChat(
     parts: [{ text: m.content }],
   }));
 
-  const responseStream = await ai.models.generateContentStream({
-    model: "gemini-2.5-flash",
+  const responseStream = await aiClient.models.generateContentStream({
+    model: "gemini-flash-latest",
     contents,
     config: {
       systemInstruction,
