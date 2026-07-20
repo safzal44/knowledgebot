@@ -22,6 +22,8 @@ const SUGGESTED_QUESTIONS = [
   "What is the code of conduct?",
 ];
 
+import { streamGeminiChat } from "@/lib/gemini";
+
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/hr-chat`;
 
 export default function AskPage() {
@@ -75,53 +77,57 @@ export default function AskPage() {
     };
 
     try {
-      const response = await fetch(CHAT_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({ messages: [...messages, userMessage] }),
-      });
+      if (import.meta.env.VITE_GEMINI_API_KEY) {
+        await streamGeminiChat([...messages, userMessage], updateAssistant);
+      } else {
+        const response = await fetch(CHAT_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({ messages: [...messages, userMessage] }),
+        });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `Request failed with status ${response.status}`);
-      }
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || `Request failed with status ${response.status}`);
+        }
 
-      if (!response.body) {
-        throw new Error("No response body");
-      }
+        if (!response.body) {
+          throw new Error("No response body");
+        }
 
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let textBuffer = "";
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let textBuffer = "";
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
 
-        textBuffer += decoder.decode(value, { stream: true });
+          textBuffer += decoder.decode(value, { stream: true });
 
-        let newlineIndex: number;
-        while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
-          let line = textBuffer.slice(0, newlineIndex);
-          textBuffer = textBuffer.slice(newlineIndex + 1);
+          let newlineIndex: number;
+          while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
+            let line = textBuffer.slice(0, newlineIndex);
+            textBuffer = textBuffer.slice(newlineIndex + 1);
 
-          if (line.endsWith("\r")) line = line.slice(0, -1);
-          if (line.startsWith(":") || line.trim() === "") continue;
-          if (!line.startsWith("data: ")) continue;
+            if (line.endsWith("\r")) line = line.slice(0, -1);
+            if (line.startsWith(":") || line.trim() === "") continue;
+            if (!line.startsWith("data: ")) continue;
 
-          const jsonStr = line.slice(6).trim();
-          if (jsonStr === "[DONE]") break;
+            const jsonStr = line.slice(6).trim();
+            if (jsonStr === "[DONE]") break;
 
-          try {
-            const parsed = JSON.parse(jsonStr);
-            const content = parsed.choices?.[0]?.delta?.content;
-            if (content) updateAssistant(content);
-          } catch {
-            textBuffer = line + "\n" + textBuffer;
-            break;
+            try {
+              const parsed = JSON.parse(jsonStr);
+              const content = parsed.choices?.[0]?.delta?.content;
+              if (content) updateAssistant(content);
+            } catch {
+              textBuffer = line + "\n" + textBuffer;
+              break;
+            }
           }
         }
       }
@@ -139,6 +145,7 @@ export default function AskPage() {
       setIsLoading(false);
     }
   };
+
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
