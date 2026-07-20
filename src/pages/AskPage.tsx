@@ -31,6 +31,10 @@ export default function AskPage() {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const voice = useVoiceInput((text) => {
+    setInput((prev) => (prev ? prev + " " : "") + text);
+    inputRef.current?.focus();
+  });
 
   // Handle initial query from URL
   useEffect(() => {
